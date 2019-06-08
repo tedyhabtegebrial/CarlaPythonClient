@@ -148,8 +148,11 @@ def run_carla_client(args):
                     horizontal_cameras['HorizontalCamera{0}RGB'.format(i)].get_transform())
             forward_cameras_to_car = []
             for i in range(len(x_locs)):
-                forward_cameras_to_car.append(
-                    forward_cameras['ForwardCamera{0}RGB'.format(i)].get_transform())
+                if i==len(x_locs)//2:
+                    pass
+                else:
+                    forward_cameras_to_car.append(
+                        forward_cameras['ForwardCamera{0}RGB'.format(i)].get_transform())
             # camera_90_p_l_to_car_transform = camera_90_p_l.get_transform()
             # camera_90_p_r_to_car_transform = camera_90_p_r.get_transform()
             # Create a folder for saving episode data
@@ -163,11 +166,14 @@ def run_carla_client(args):
                 # player_measurements = measurements.player_measurements
                 world_transform = Transform(measurements.player_measurements.transform)
                 # Compute the final transformation matrix.
-                horizontal_cameras_to_world = []
-                forward_cameras_to_world = []
-                for i in range(7):
-                    horizontal_cameras_to_world.append(world_transform * horizontal_cameras_to_car[i])
-                    forward_cameras_to_world.append(world_transform * forward_cameras_to_car[i])
+                horizontal_cameras_to_world = [world_transform*cam_to_car \
+                                        for cam_to_car in horizontal_cameras_to_car]
+                forward_cameras_to_world = [world_transform*cam_to_car \
+                                        for cam_to_car in forward_cameras_to_car]
+
+                # for i in range(len()):
+                #     horizontal_cameras_to_world.append()
+                #     forward_cameras_to_world.append(world_transform * forward_cameras_to_car[i])
                 # Save the images to disk if requested.
                 if frame >= 30 and (frame % 2 == 0):
                     if args.save_images_to_disk:
@@ -186,7 +192,9 @@ def run_carla_client(args):
                                 myfile.write(line)
                                 line = ""
                         # Forward Cameras
-                        for cam_num in range(len(x_locs)):
+                        forward_cam_ids = list(range(len(x_locs)))
+                        forward_cam_ids.pop(mid_cam)
+                        for cam_num in forward_cam_ids:
                             if cam_num==int(len(x_locs)//2):
                                 pass
                             else:
