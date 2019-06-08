@@ -30,9 +30,11 @@ import cv2
 def run_carla_client(args):
     # Here we will run 3 episodes with 300 frames each.
     number_of_episodes = 15
-    frames_per_episode = 2030
+    frames_per_episode = 10030
     #              [0  , 1  , 2  , 3  , 4  , 5  , 6 , 7, 8  , 9  , 10, 11, 12, 13, 14]
+    # vehicles_num = [60, 60, 70, 50, 60, 60, 80, 60, 60, 60, 50, 70, 60, 50, 50]
     vehicles_num = [60, 60, 70, 50, 60, 60, 80, 60, 60, 60, 50, 70, 60, 50, 50]
+
 
     # We assume the CARLA server is already waiting for a client to connect at
     # host:port. To create a connection we can use the `make_carla_client`
@@ -69,33 +71,34 @@ def run_carla_client(args):
                 # [-1.62, -1.08, -0.54, 0.0, 0.54, 1.08, 1.62]
                 # LEFT RGB CAMERA
                 y_locs = [-1.62, -1.08, -0.54, 0.0, 0.54, 1.08, 1.62]
+                x_locs = [1.3, 1.84, 2.38, 2.92, 3.46, 4.0, 4.54]
                 horizontal_cameras = {}
                 for i,y_position in enumerate(y_locs):
                     # COLOR
                     camera_rgb = Camera('HorizontalCamera{0}RGB'.format(i),
                                      PostProcessing='SceneFinal')
                     camera_rgb.set_image_size(800, 600)
-                    camera_rgb.set_position(1.30, y_position, 1.50)
+                    camera_rgb.set_position(x_locs[3], y_position, 1.50)
                     horizontal_cameras['HorizontalCamera{0}RGB'.format(i)] = camera_rgb
                     settings.add_sensor(camera_rgb)
                     # DEPTH
                     camera_depth = Camera('HorizontalCamera{0}Depth'.format(i),
                                           PostProcessing='Depth')
                     camera_depth.set_image_size(800, 600)
-                    camera_depth.set_position(1.30, y_position, 1.50)
+                    camera_depth.set_position(x_locs[3], y_position, 1.50)
                     horizontal_cameras['HorizontalCamera{0}Depth'.format(i)] = camera_depth
                     settings.add_sensor(camera_depth)
                     # SEGMENTATION
                     camera_seg = Camera('HorizontalCamera{0}Seg'.format(i),
                                        PostProcessing='SemanticSegmentation')
                     camera_seg.set_image_size(800, 600)
-                    camera_seg.set_position(1.30, y_position, 1.50)
+                    camera_seg.set_position(x_locs[3], y_position, 1.50)
                     horizontal_cameras['HorizontalCamera{0}Seg'.format(i)] = camera_seg
                     settings.add_sensor(camera_seg)
 
                 forward_cameras = {}
                 # z_locs = [1.5, 2.04, 2.58, 3.12, 3.66, 4.2, 4.74]
-                x_locs = [1.3, 1.84, 2.38, 2.92, 3.46, 4.0, 4.54]
+
                 # Cameras moving in to the scene
                 # the are moved across the x axis
                 # camera_90_p_ls.set_position(0.27, 1.0, 1.50)
@@ -104,21 +107,21 @@ def run_carla_client(args):
                     camera_rgb = Camera('ForwardCamera{0}RGB'.format(i),
                                      PostProcessing='SceneFinal')
                     camera_rgb.set_image_size(800, 600)
-                    camera_rgb.set_position(x_position, 0.0, 1.5)
+                    camera_rgb.set_position(x_position, y_locs[3], 1.5)
                     forward_cameras['ForwardCamera{0}RGB'.format(i)] = camera_rgb
                     settings.add_sensor(camera_rgb)
                     # DEPTH
                     camera_depth = Camera('ForwardCamera{0}Depth'.format(i),
                                           PostProcessing='Depth')
                     camera_depth.set_image_size(800, 600)
-                    camera_depth.set_position(x_position, 0.0, 1.5)
+                    camera_depth.set_position(x_position, y_locs[3], 1.5)
                     forward_cameras['ForwardCamera{0}Depth'.format(i)] = camera_depth
                     settings.add_sensor(camera_depth)
                     # SEGMENTATION
                     camera_seg = Camera('ForwardCamera{0}Seg'.format(i),
                                        PostProcessing='SemanticSegmentation')
                     camera_seg.set_image_size(800, 600)
-                    camera_seg.set_position(x_position, 0.0, 1.5)
+                    camera_seg.set_position(x_position, y_locs[3], 1.5)
                     forward_cameras['ForwardCamera{0}Seg'.format(i)] = camera_seg
                     settings.add_sensor(camera_seg)
             else:
@@ -146,8 +149,8 @@ def run_carla_client(args):
             # camera_90_p_r_to_car_transform = camera_90_p_r.get_unreal_transform()
 
             # Create a folder for saving episode data
-            if not os.path.isdir("/data/teddy/Datasets/carla_cross/Town02/episode_{:0>5d}".format(episode)):
-                os.makedirs("/data/teddy/Datasets/carla_cross/Town02/episode_{:0>5d}".format(episode))
+            if not os.path.isdir("/data/teddy/Datasets/carla_cross/Town01/episode_{:0>5d}".format(episode)):
+                os.makedirs("/data/teddy/Datasets/carla_cross/Town01/episode_{:0>5d}".format(episode))
 
             # Iterate every frame in the episode.
             for frame in range(0, frames_per_episode):
@@ -162,10 +165,9 @@ def run_carla_client(args):
                 horizontal_cameras_to_world = []
                 forward_cameras_to_world = []
                 for i in range(7):
-                    #print(world_transform.matrix.shape)
-                    #print(np.linalg.det(world_transform.matrix[0:3, 0:3]))
-                    #print(np.linalg.det(horizontal_cameras_to_car[i].matrix[0:3, 0:3]))
-                    #exit()
+                    # print(type(world_transform))
+                    # print(horizontal_cameras_to_car[i].shape)
+                    # exit()
                     horizontal_cameras_to_world.append(world_transform * horizontal_cameras_to_car[i])
                     forward_cameras_to_world.append(world_transform * forward_cameras_to_car[i])
                 # Save the images to disk if requested.
@@ -290,8 +292,8 @@ def main():
 
     logging.info('listening to server %s:%s', args.host, args.port)
 
-    args.out_filename_format = '/data/teddy/Datasets/carla_cross/Town02/episode_{:0>5d}/{:s}/{:0>6d}'
-    args.root_path = '/data/teddy/Datasets/carla_cross/Town02/'
+    args.out_filename_format = '/data/teddy/Datasets/carla_cross/Town01/episode_{:0>5d}/{:s}/{:0>6d}'
+    args.root_path = '/data/teddy/Datasets/carla_cross/Town01/'
 
     while True:
         try:
