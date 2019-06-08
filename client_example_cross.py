@@ -43,8 +43,13 @@ def run_carla_client(args):
     # context manager makes sure the connection is always cleaned up on exit.
     with make_carla_client(args.host, args.port) as client:
         print('CarlaClient connected')
+        list_of_episodes = list(range(0, number_of_episodes))
+        list_of_episodes.pop(13)
+        list_of_episodes.pop(12)
+        list_of_episodes.pop(10)
+        list_of_episodes.pop(8)
 
-        for episode in range(0, number_of_episodes):
+        for episode in list_of_episodes:
             # Start a new episode.
 
             if args.settings_filepath is None:
