@@ -70,29 +70,32 @@ def run_carla_client(args):
                 #### Horizontally shifted in the following Range
                 # [-1.62, -1.08, -0.54, 0.0, 0.54, 1.08, 1.62]
                 # LEFT RGB CAMERA
-                y_locs = [-1.62, -1.08, -0.54, 0.0, 0.54, 1.08, 1.62]
-                x_locs = [1.3, 1.84, 2.38, 2.92, 3.46, 4.0, 4.54]
+                # y_locs = [-1.62, -1.08, -0.54, 0.0, 0.54, 1.08, 1.62]
+                # x_locs = [1.3, 1.84, 2.38, 2.92, 3.46, 4.0, 4.54]
+                y_locs = [-1.08, -0.54, 0.0, 0.54, 1.08]
+                x_locs = [1.84, 2.38, 2.92, 3.46, 4.0]
+                mid_cam = len(x_locs)//2
                 horizontal_cameras = {}
                 for i,y_position in enumerate(y_locs):
                     # COLOR
                     camera_rgb = Camera('HorizontalCamera{0}RGB'.format(i),
                                      PostProcessing='SceneFinal')
                     camera_rgb.set_image_size(800, 600)
-                    camera_rgb.set_position(x_locs[3], y_position, 1.50)
+                    camera_rgb.set_position(x_locs[mid_cam], y_position, 1.50)
                     horizontal_cameras['HorizontalCamera{0}RGB'.format(i)] = camera_rgb
                     settings.add_sensor(camera_rgb)
                     # DEPTH
                     camera_depth = Camera('HorizontalCamera{0}Depth'.format(i),
                                           PostProcessing='Depth')
                     camera_depth.set_image_size(800, 600)
-                    camera_depth.set_position(x_locs[3], y_position, 1.50)
+                    camera_depth.set_position(x_locs[mid_cam], y_position, 1.50)
                     horizontal_cameras['HorizontalCamera{0}Depth'.format(i)] = camera_depth
                     settings.add_sensor(camera_depth)
                     # SEGMENTATION
                     camera_seg = Camera('HorizontalCamera{0}Seg'.format(i),
                                        PostProcessing='SemanticSegmentation')
                     camera_seg.set_image_size(800, 600)
-                    camera_seg.set_position(x_locs[3], y_position, 1.50)
+                    camera_seg.set_position(x_locs[mid_cam], y_position, 1.50)
                     horizontal_cameras['HorizontalCamera{0}Seg'.format(i)] = camera_seg
                     settings.add_sensor(camera_seg)
 
@@ -104,26 +107,29 @@ def run_carla_client(args):
                 # camera_90_p_ls.set_position(0.27, 1.0, 1.50)
                 for i,x_position in enumerate(x_locs):
                     # COLOR
-                    camera_rgb = Camera('ForwardCamera{0}RGB'.format(i),
-                                     PostProcessing='SceneFinal')
-                    camera_rgb.set_image_size(800, 600)
-                    camera_rgb.set_position(x_position, y_locs[3], 1.5)
-                    forward_cameras['ForwardCamera{0}RGB'.format(i)] = camera_rgb
-                    settings.add_sensor(camera_rgb)
-                    # DEPTH
-                    camera_depth = Camera('ForwardCamera{0}Depth'.format(i),
-                                          PostProcessing='Depth')
-                    camera_depth.set_image_size(800, 600)
-                    camera_depth.set_position(x_position, y_locs[3], 1.5)
-                    forward_cameras['ForwardCamera{0}Depth'.format(i)] = camera_depth
-                    settings.add_sensor(camera_depth)
-                    # SEGMENTATION
-                    camera_seg = Camera('ForwardCamera{0}Seg'.format(i),
-                                       PostProcessing='SemanticSegmentation')
-                    camera_seg.set_image_size(800, 600)
-                    camera_seg.set_position(x_position, y_locs[3], 1.5)
-                    forward_cameras['ForwardCamera{0}Seg'.format(i)] = camera_seg
-                    settings.add_sensor(camera_seg)
+                    if i==int(len(x_locs)/2):
+                        pass
+                    else:
+                        camera_rgb = Camera('ForwardCamera{0}RGB'.format(i),
+                                         PostProcessing='SceneFinal')
+                        camera_rgb.set_image_size(800, 600)
+                        camera_rgb.set_position(x_position, y_locs[mid_cam], 1.5)
+                        forward_cameras['ForwardCamera{0}RGB'.format(i)] = camera_rgb
+                        settings.add_sensor(camera_rgb)
+                        # DEPTH
+                        camera_depth = Camera('ForwardCamera{0}Depth'.format(i),
+                                              PostProcessing='Depth')
+                        camera_depth.set_image_size(800, 600)
+                        camera_depth.set_position(x_position, y_locs[mid_cam], 1.5)
+                        forward_cameras['ForwardCamera{0}Depth'.format(i)] = camera_depth
+                        settings.add_sensor(camera_depth)
+                        # SEGMENTATION
+                        camera_seg = Camera('ForwardCamera{0}Seg'.format(i),
+                                           PostProcessing='SemanticSegmentation')
+                        camera_seg.set_image_size(800, 600)
+                        camera_seg.set_position(x_position, y_locs[mid_cam], 1.5)
+                        forward_cameras['ForwardCamera{0}Seg'.format(i)] = camera_seg
+                        settings.add_sensor(camera_seg)
             else:
                 with open(args.settings_filepath, 'r') as fp:
                     settings = fp.read()
@@ -137,37 +143,29 @@ def run_carla_client(args):
             print('Starting new episode...')
             client.start_episode(player_start)
             horizontal_cameras_to_car = []
-            for i in range(7):
+            for i in range(len(y_locs)):
                 horizontal_cameras_to_car.append(
                     horizontal_cameras['HorizontalCamera{0}RGB'.format(i)].get_unreal_transform())
             forward_cameras_to_car = []
-            for i in range(7):
+            for i in range(len(x_locs)):
                 forward_cameras_to_car.append(
                     forward_cameras['ForwardCamera{0}RGB'.format(i)].get_unreal_transform())
-            #
             # camera_90_p_l_to_car_transform = camera_90_p_l.get_unreal_transform()
             # camera_90_p_r_to_car_transform = camera_90_p_r.get_unreal_transform()
-
             # Create a folder for saving episode data
             if not os.path.isdir("/data/teddy/Datasets/carla_cross/Town01/episode_{:0>5d}".format(episode)):
                 os.makedirs("/data/teddy/Datasets/carla_cross/Town01/episode_{:0>5d}".format(episode))
 
             # Iterate every frame in the episode.
             for frame in range(0, frames_per_episode):
-
                 # Read the data produced by the server this frame.
                 measurements, sensor_data = client.read_data()
-
                 # player_measurements = measurements.player_measurements
                 world_transform = Transform(measurements.player_measurements.transform)
-
                 # Compute the final transformation matrix.
                 horizontal_cameras_to_world = []
                 forward_cameras_to_world = []
                 for i in range(7):
-                    # print(type(world_transform))
-                    # print(horizontal_cameras_to_car[i].shape)
-                    # exit()
                     horizontal_cameras_to_world.append(world_transform * horizontal_cameras_to_car[i])
                     forward_cameras_to_world.append(world_transform * forward_cameras_to_car[i])
                 # Save the images to disk if requested.
@@ -176,9 +174,8 @@ def run_carla_client(args):
                         for name, measurement in sensor_data.items():
                             filename = args.out_filename_format.format(episode, name, (frame-30)/2)
                             measurement.save_to_disk(filename)
-
                         # Save Transform matrix of each camera to separated files
-                        for cam_num in range(7):
+                        for cam_num in range(y_locs):
                             line = ""
                             filename = "{}episode_{:0>5d}/HorizontalCamera{}".format(args.root_path, episode, cam_num) + ".txt"
                             with open(filename, 'a+') as myfile:
@@ -189,16 +186,19 @@ def run_carla_client(args):
                                 myfile.write(line)
                                 line = ""
                         # Forward Cameras
-                        for cam_num in range(7):
-                            line = ""
-                            filename = "{}episode_{:0>5d}/ForwardCamera{}".format(args.root_path, episode, cam_num) + ".txt"
-                            with open(filename, 'a+') as myfile:
-                                for x in np.asarray(forward_cameras_to_world[cam_num].matrix[:3, :]).reshape(-1):
-                                    line += "{:.8e} ".format(x)
-                                line = line[:-1]
-                                line += "\n"
-                                myfile.write(line)
+                        for cam_num in range(len(x_locs)):
+                            if cam_num==int(len(x_locs)//2):
+                                pass
+                            else:
                                 line = ""
+                                filename = "{}episode_{:0>5d}/ForwardCamera{}".format(args.root_path, episode, cam_num) + ".txt"
+                                with open(filename, 'a+') as myfile:
+                                    for x in np.asarray(forward_cameras_to_world[cam_num].matrix[:3, :]).reshape(-1):
+                                        line += "{:.8e} ".format(x)
+                                    line = line[:-1]
+                                    line += "\n"
+                                    myfile.write(line)
+                                    line = ""
                 if not args.autopilot:
                     client.send_control(
                         steer=random.uniform(-1.0, 1.0),

@@ -89,7 +89,7 @@ class Sensor(object):
         @todo Do we need to expose this?
         '''
         to_unreal_transform = Transform(Rotation(roll=-90, yaw=90), Scale(x=-1))
-        return self.get_transform() # * to_unreal_transform
+        return self.get_transform() * to_unreal_transform
 
 
 class Camera(Sensor):
