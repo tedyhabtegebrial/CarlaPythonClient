@@ -47,3 +47,4 @@ for itr, episode in enumerate(list_of_episodes):
                 im_pil = Image.open(img)
                 im_pil.save(dest_name, quality=90)
                 im_pil.close()
+                os.system(f'rm {img}')
