@@ -9,7 +9,7 @@ def full_list_dir(input_path, is_dir=False):
         return elements
     else:
         folders = [e for e in elements if os.path.isdir(e)]
-        return folder
+        return folders
 
 
 forward_cameras = list(range(5))
