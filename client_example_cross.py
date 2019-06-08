@@ -194,19 +194,19 @@ def run_carla_client(args):
                         # Forward Cameras
                         forward_cam_ids = list(range(len(x_locs)))
                         forward_cam_ids.pop(mid_cam)
-                        for cam_num in forward_cam_ids:
-                            if cam_num==int(len(x_locs)//2):
-                                pass
-                            else:
+                        for i, cam_num in enumerate(forward_cam_ids):
+                            # if cam_num==int(len(x_locs)//2):
+                            #     pass
+                            # else:
+                            line = ""
+                            filename = "{}episode_{:0>5d}/ForwardCamera{}".format(args.root_path, episode, cam_num) + ".txt"
+                            with open(filename, 'a+') as myfile:
+                                for x in np.asarray(forward_cameras_to_world[i].matrix[:3, :]).reshape(-1):
+                                    line += "{:.8e} ".format(x)
+                                line = line[:-1]
+                                line += "\n"
+                                myfile.write(line)
                                 line = ""
-                                filename = "{}episode_{:0>5d}/ForwardCamera{}".format(args.root_path, episode, cam_num) + ".txt"
-                                with open(filename, 'a+') as myfile:
-                                    for x in np.asarray(forward_cameras_to_world[cam_num].matrix[:3, :]).reshape(-1):
-                                        line += "{:.8e} ".format(x)
-                                    line = line[:-1]
-                                    line += "\n"
-                                    myfile.write(line)
-                                    line = ""
                 if not args.autopilot:
                     client.send_control(
                         steer=random.uniform(-1.0, 1.0),
