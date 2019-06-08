@@ -31,7 +31,7 @@ for town in towns:
 for episode in list_of_episodes:
     for col_folder in COLOR_CAMERAS:
         col_path = os.path.join(episode, col_folder)
-        imgs_list = full_list_dir(col_path, Flase)
+        imgs_list = full_list_dir(col_path, False)
         for im in imgs_list:
             print(im)
         exit()
