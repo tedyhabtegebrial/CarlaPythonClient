@@ -145,13 +145,13 @@ def run_carla_client(args):
             horizontal_cameras_to_car = []
             for i in range(len(y_locs)):
                 horizontal_cameras_to_car.append(
-                    horizontal_cameras['HorizontalCamera{0}RGB'.format(i)].get_unreal_transform())
+                    horizontal_cameras['HorizontalCamera{0}RGB'.format(i)].get_transform())
             forward_cameras_to_car = []
             for i in range(len(x_locs)):
                 forward_cameras_to_car.append(
-                    forward_cameras['ForwardCamera{0}RGB'.format(i)].get_unreal_transform())
-            # camera_90_p_l_to_car_transform = camera_90_p_l.get_unreal_transform()
-            # camera_90_p_r_to_car_transform = camera_90_p_r.get_unreal_transform()
+                    forward_cameras['ForwardCamera{0}RGB'.format(i)].get_transform())
+            # camera_90_p_l_to_car_transform = camera_90_p_l.get_transform()
+            # camera_90_p_r_to_car_transform = camera_90_p_r.get_transform()
             # Create a folder for saving episode data
             if not os.path.isdir("/data/teddy/Datasets/carla_cross/Town1/episode_{:0>5d}".format(episode)):
                 os.makedirs("/data/teddy/Datasets/carla_cross/Town1/episode_{:0>5d}".format(episode))
