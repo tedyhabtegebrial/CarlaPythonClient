@@ -45,9 +45,5 @@ for itr, episode in enumerate(list_of_episodes):
             if img.endswith('.png'):
                 dest_name = img.replace('png', 'jpg')
                 im_pil = Image.open(img)
-                print('re-writting')
-                print(img , 'to')
-                print(dest_name)
-                # im_pil.save(filename=dest_name, quality=90)
+                im_pil.save(filename=dest_name, quality=90)
                 im_pil.close()
-                exit()
