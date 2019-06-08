@@ -181,7 +181,7 @@ def run_carla_client(args):
                             filename = args.out_filename_format.format(episode, name, (frame-30)/2)
                             measurement.save_to_disk(filename)
                         # Save Transform matrix of each camera to separated files
-                        for cam_num in range(y_locs):
+                        for cam_num in range(len(y_locs)):
                             line = ""
                             filename = "{}episode_{:0>5d}/HorizontalCamera{}".format(args.root_path, episode, cam_num) + ".txt"
                             with open(filename, 'a+') as myfile:
