@@ -16,10 +16,17 @@ forward_cameras = list(range(5))
 forward_cameras.pop()
 horizontal_cameras = list(range(5))
 
-root_folder = '/data/teddy/Datasets/carla_cross'
-
-COLOR_CAMERAS = ['ForwardCamera{}RGB'.format(i) for i in forward_cameras]
-COLOR_CAMERAS += ['HorizontalCamera{}RGB'.format(i) for i in horizontal_cameras]
+new_calra = False
+if new_calra:
+    # For new carla
+    root_folder = '/data/teddy/Datasets/carla_cross'
+    COLOR_CAMERAS = ['ForwardCamera{}RGB'.format(i) for i in forward_cameras]
+    COLOR_CAMERAS += ['HorizontalCamera{}RGB'.format(i) for i in horizontal_cameras]
+else:
+    # For old carla
+    COLOR_CAMERAS = ['45_N_LeftCameraRGB', '45_N_RightCameraRGB',
+                    '45_P_LeftCameraRGB', '45_P_RightCameraRGB',
+                    'LeftCameraRGB', 'RightCameraRGB']
 
 towns = full_list_dir(root_folder, is_dir=True)
 list_of_episodes = []
@@ -28,16 +35,18 @@ for town in towns:
         list_of_episodes.append(e)
 
 # Run over each episode and each camera folder apply png to jpeg conversion
-for episode in list_of_episodes:
+for itr, episode in enumerate(list_of_episodes):
+    print(f'Episode {itr} of {len(list_of_episodes)}')
     for col_folder in COLOR_CAMERAS:
         col_path = os.path.join(episode, col_folder)
         imgs_list = full_list_dir(col_path, False)
-        for im in imgs_list:
-            print(im)
-        exit()
         for img in imgs_list:
             if img.endswith('.png'):
                 dest_name = img.replace('png', 'jpg')
                 im_pil = Image.open(img)
-                im_pil.save(filename=dest_name, quality=90)
-                im_pil.close()
+                print('re-writting')
+                print(img , 'to')
+                print(im_pil)
+                # im_pil.save(filename=dest_name, quality=90)
+                # im_pil.close()
+                exit()
