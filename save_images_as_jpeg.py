@@ -23,7 +23,7 @@ if new_calra:
     COLOR_CAMERAS = ['ForwardCamera{}RGB'.format(i) for i in forward_cameras]
     COLOR_CAMERAS += ['HorizontalCamera{}RGB'.format(i) for i in horizontal_cameras]
 else:
-    # For old carla
+    # For old carla, Original size = 505G
     root_folder = '/data/teddy/Datasets/carla/temp_carla'
     COLOR_CAMERAS = ['45_N_LeftCameraRGB', '45_N_RightCameraRGB',
                     '45_P_LeftCameraRGB', '45_P_RightCameraRGB',
@@ -45,5 +45,5 @@ for itr, episode in enumerate(list_of_episodes):
             if img.endswith('.png'):
                 dest_name = img.replace('png', 'jpg')
                 im_pil = Image.open(img)
-                im_pil.save(filename=dest_name, quality=90)
+                im_pil.save(dest_name, quality=90)
                 im_pil.close()
