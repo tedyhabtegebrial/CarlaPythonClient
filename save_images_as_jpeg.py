@@ -24,6 +24,7 @@ if new_calra:
     COLOR_CAMERAS += ['HorizontalCamera{}RGB'.format(i) for i in horizontal_cameras]
 else:
     # For old carla
+    root_folder = '/data/teddy/Datasets/carla/temp_carla'
     COLOR_CAMERAS = ['45_N_LeftCameraRGB', '45_N_RightCameraRGB',
                     '45_P_LeftCameraRGB', '45_P_RightCameraRGB',
                     'LeftCameraRGB', 'RightCameraRGB']
