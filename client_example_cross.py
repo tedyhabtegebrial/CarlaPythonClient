@@ -33,7 +33,8 @@ def run_carla_client(args):
     frames_per_episode = 10030
     #              [0  , 1  , 2  , 3  , 4  , 5  , 6 , 7, 8  , 9  , 10, 11, 12, 13, 14]
     # vehicles_num = [60, 60, 70, 50, 60, 60, 80, 60, 60, 60, 50, 70, 60, 50, 50]
-    vehicles_num = [60, 60, 70, 50, 60, 60, 80, 60, 60, 60, 50, 70, 60, 50, 50]
+    vehicles_num = [25, 20, 30, 20, 15, 45, 45, 50, 25, 25, 25, 20, 25, 25, 25]
+    # vehicles_num = [60, 60, 70, 50, 60, 60, 80, 60, 60, 60, 50, 70, 60, 50, 50]
 
 
     # We assume the CARLA server is already waiting for a client to connect at
@@ -43,11 +44,12 @@ def run_carla_client(args):
     # context manager makes sure the connection is always cleaned up on exit.
     with make_carla_client(args.host, args.port) as client:
         print('CarlaClient connected')
-        list_of_episodes = list(range(0, number_of_episodes))
-        list_of_episodes.pop(13)
-        list_of_episodes.pop(12)
-        list_of_episodes.pop(10)
-        list_of_episodes.pop(8)
+        list_of_episodes = [0, 1, 2, 3, 4, 5, 6, 7, 9, 11, 14]
+        #list(range(0, number_of_episodes))
+        #list_of_episodes.pop(13)
+        #list_of_episodes.pop(12)
+        #list_of_episodes.pop(10)
+        #list_of_episodes.pop(8)
 
         for episode in list_of_episodes:
             # Start a new episode.
