@@ -36,7 +36,6 @@ def run_carla_client(args):
     vehicles_num = [25, 20, 30, 20, 15, 45, 45, 50, 25, 25, 25, 20, 25, 25, 25]
     # vehicles_num = [60, 60, 70, 50, 60, 60, 80, 60, 60, 60, 50, 70, 60, 50, 50]
 
-
     # We assume the CARLA server is already waiting for a client to connect at
     # host:port. To create a connection we can use the `make_carla_client`
     # context manager, it creates a CARLA client object and starts the
@@ -163,8 +162,8 @@ def run_carla_client(args):
             # camera_90_p_l_to_car_transform = camera_90_p_l.get_transform()
             # camera_90_p_r_to_car_transform = camera_90_p_r.get_transform()
             # Create a folder for saving episode data
-            if not os.path.isdir("/data/teddy/Datasets/carla_cross/Town2/episode_{:0>5d}".format(episode)):
-                os.makedirs("/data/teddy/Datasets/carla_cross/Town2/episode_{:0>5d}".format(episode))
+            if not os.path.isdir("/data/teddy/Datasets/carla_cross/Town1/episode_{:0>5d}".format(episode)):
+                os.makedirs("/data/teddy/Datasets/carla_cross/Town1/episode_{:0>5d}".format(episode))
 
             # Iterate every frame in the episode.
             for frame in range(0, frames_per_episode):
@@ -307,8 +306,8 @@ def main():
 
     logging.info('listening to server %s:%s', args.host, args.port)
 
-    args.out_filename_format = '/data/teddy/Datasets/carla_cross/Town2/episode_{:0>5d}/{:s}/{:0>6d}'
-    args.root_path = '/data/teddy/Datasets/carla_cross/Town2/'
+    args.out_filename_format = '/data/teddy/Datasets/carla_cross/Town1/episode_{:0>5d}/{:s}/{:0>6d}'
+    args.root_path = '/data/teddy/Datasets/carla_cross/Town1/'
 
     while True:
         try:
