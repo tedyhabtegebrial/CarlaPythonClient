@@ -33,7 +33,7 @@ def run_carla_client(args):
     frames_per_episode = 10030
     #              [0  , 1  , 2  , 3  , 4  , 5  , 6 , 7, 8  , 9  , 10, 11, 12, 13, 14]
     # vehicles_num = [60, 60, 70, 50, 60, 60, 80, 60, 60, 60, 50, 70, 60, 50, 50]
-    vehicles_num = [25, 20, 30, 20, 15, 45, 45, 50, 25, 25, 25, 20, 25, 25, 25]
+    vehicles_num = [35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 40, 40, 40]
     # vehicles_num = [60, 60, 70, 50, 60, 60, 80, 60, 60, 60, 50, 70, 60, 50, 50]
 
     # We assume the CARLA server is already waiting for a client to connect at
@@ -63,7 +63,7 @@ def run_carla_client(args):
                     SynchronousMode=True,
                     SendNonPlayerAgentsInfo=False,
                     NumberOfVehicles= vehicles_num[episode],#random.choice([0, 20, 15, 20, 25, 21, 24, 18, 40, 35, 25, 30]), #25,
-                    NumberOfPedestrians=50,
+                    NumberOfPedestrians=25,
                     DisableTwoWheeledVehicles=False,
                     WeatherId= episode, #1, #random.choice([1, 3, 7, 8, 14]),
                     QualityLevel=args.quality_level)
