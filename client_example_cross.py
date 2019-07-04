@@ -162,8 +162,8 @@ def run_carla_client(args):
             # camera_90_p_l_to_car_transform = camera_90_p_l.get_transform()
             # camera_90_p_r_to_car_transform = camera_90_p_r.get_transform()
             # Create a folder for saving episode data
-            if not os.path.isdir("/data/teddy/Datasets/carla_cross/Town1/episode_{:0>5d}".format(episode)):
-                os.makedirs("/data/teddy/Datasets/carla_cross/Town1/episode_{:0>5d}".format(episode))
+            if not os.path.isdir("/data/teddy/Datasets/carla_cross_2/Town1/episode_{:0>5d}".format(episode)):
+                os.makedirs("/data/teddy/Datasets/carla_cross_2/Town1/episode_{:0>5d}".format(episode))
 
             # Iterate every frame in the episode.
             for frame in range(0, frames_per_episode):
@@ -306,8 +306,8 @@ def main():
 
     logging.info('listening to server %s:%s', args.host, args.port)
 
-    args.out_filename_format = '/data/teddy/Datasets/carla_cross/Town1/episode_{:0>5d}/{:s}/{:0>6d}'
-    args.root_path = '/data/teddy/Datasets/carla_cross/Town1/'
+    args.out_filename_format = '/data/teddy/Datasets/carla_cross_2/Town1/episode_{:0>5d}/{:s}/{:0>6d}'
+    args.root_path = '/data/teddy/Datasets/carla_cross_2/Town1/'
 
     while True:
         try:
