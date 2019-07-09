@@ -24,7 +24,7 @@ from carla.tcp import TCPConnectionError
 from carla.util import print_over_same_line
 from carla.transform import Transform #, Translation, Rotation, Scale
 from carla import image_converter
-import cv
+# import cv
 
 
 def run_carla_client(args):
