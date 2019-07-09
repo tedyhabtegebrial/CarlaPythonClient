@@ -24,7 +24,7 @@ from carla.tcp import TCPConnectionError
 from carla.util import print_over_same_line
 from carla.transform import Transform #, Translation, Rotation, Scale
 from carla import image_converter
-import cv2
+import cv
 
 
 def run_carla_client(args):
@@ -33,8 +33,8 @@ def run_carla_client(args):
     frames_per_episode = 10030
     #              [0  , 1  , 2  , 3  , 4  , 5  , 6 , 7, 8  , 9  , 10, 11, 12, 13, 14]
     # vehicles_num = [60, 60, 70, 50, 60, 60, 80, 60, 60, 60, 50, 70, 60, 50, 50]
-    vehicles_num = [35, 35, 30, 35, 35, 35, 35, 35, 35, 35, 35, 35, 40, 40, 40]
-    # vehicles_num = [60, 60, 70, 50, 60, 60, 80, 60, 60, 60, 50, 70, 60, 50, 50]
+    # vehicles_num = [35, 35, 30, 35, 35, 35, 35, 35, 35, 35, 35, 35, 40, 40, 40]
+    vehicles_num = [60, 60, 70, 50, 60, 60, 80, 60, 60, 60, 50, 70, 60, 50, 50]
 
     # We assume the CARLA server is already waiting for a client to connect at
     # host:port. To create a connection we can use the `make_carla_client`
@@ -47,8 +47,8 @@ def run_carla_client(args):
         # list_of_episodes = [2, 3, 4, 5, 6, 7, 9, 11, 14]
         # list_of_episodes = [2, 7]
         # list_of_episodes = [5, 6, 7, 11, 14]
-        # list_of_episodes = [6, 11]
-        list_of_episodes = [7]
+        list_of_episodes = [6, 11]
+        # list_of_episodes = [7]
         #list(range(0, number_of_episodes))
         #list_of_episodes.pop(13)
         #list_of_episodes.pop(12)
