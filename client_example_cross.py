@@ -35,7 +35,6 @@ def run_carla_client(args):
     # vehicles_num = [60, 60, 70, 50, 60, 60, 80, 60, 60, 60, 50, 70, 60, 50, 50]
     # vehicles_num = [35, 35, 30, 35, 35, 35, 35, 35, 35, 35, 35, 35, 40, 40, 40]
     vehicles_num = [60, 60, 70, 50, 60, 60, 80, 60, 60, 60, 50, 70, 60, 50, 50]
-
     # We assume the CARLA server is already waiting for a client to connect at
     # host:port. To create a connection we can use the `make_carla_client`
     # context manager, it creates a CARLA client object and starts the
