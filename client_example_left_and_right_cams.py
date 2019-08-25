@@ -187,7 +187,7 @@ def run_carla_client(args):
                             filename = args.out_filename_format.format(episode, name, (frame-30)/2)
                             measurement.save_to_disk(filename)
                         # Save Transform matrix of each camera to separated files
-                        for cam_num in range(len(y_locs)):
+                        for cam_num in range(len(x_locs_left)):
                             line = ""
                             filename = "{}episode_{:0>5d}/LeftSideCameras{}".format(args.root_path, episode, cam_num) + ".txt"
                             with open(filename, 'a+') as myfile:
@@ -200,7 +200,7 @@ def run_carla_client(args):
                         # Forward Cameras
                         forward_cam_ids = list(range(len(x_locs)))
                         forward_cam_ids.pop(mid_cam)
-                        for i, cam_num in enumerate(forward_cam_ids):
+                        for i, cam_num in enumerate(x_locs_right):
                             # if cam_num==int(len(x_locs)//2):
                             #     pass
                             # else:
