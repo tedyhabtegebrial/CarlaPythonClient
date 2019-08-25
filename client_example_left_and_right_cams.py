@@ -112,15 +112,15 @@ def run_carla_client(args):
                     left_side_cams['left_side_cams{0}Seg'.format(i)] = camera_seg
                     settings.add_sensor(camera_seg)
 
-                y_locs_left = 1.08
-                x_locs_left = [1.84, 2.38, 2.92]
+                y_locs_right = 1.08
+                x_locs_right = [1.84, 2.38, 2.92]
                 right_side_cams = {}
-                for i,x_position in enumerate(x_locs_left):
+                for i,x_position in enumerate(x_locs_right):
                     # COLOR
                     camera_rgb = Camera('right_side_cams{0}RGB'.format(i),
                                      PostProcessing='SceneFinal')
                     camera_rgb.set_image_size(800, 600)
-                    camera_rgb.set_position(x_position, y_locs_left, 1.50)
+                    camera_rgb.set_position(x_position, y_locs_right, 1.50)
                     camera_rgb.set_rotation(0, 90.0, 0)
                     right_side_cams['right_side_cams{0}RGB'.format(i)] = camera_rgb
                     settings.add_sensor(camera_rgb)
@@ -128,7 +128,7 @@ def run_carla_client(args):
                     camera_depth = Camera('right_side_cams{0}Depth'.format(i),
                                           PostProcessing='Depth')
                     camera_depth.set_image_size(800, 600)
-                    camera_depth.set_position(x_position, y_locs_left, 1.50)
+                    camera_depth.set_position(x_position, y_locs_right, 1.50)
                     camera_depth.set_rotation(0, 90.0, 0)
                     right_side_cams['right_side_cams{0}Depth'.format(i)] = camera_depth
                     settings.add_sensor(camera_depth)
@@ -136,7 +136,7 @@ def run_carla_client(args):
                     camera_seg = Camera('right_side_cams{0}Seg'.format(i),
                                        PostProcessing='SemanticSegmentation')
                     camera_seg.set_image_size(800, 600)
-                    camera_seg.set_position(x_position, y_locs_left, 1.50)
+                    camera_seg.set_position(x_position, y_locs_right, 1.50)
                     camera_seg.set_rotation(0, 90.0, 0)
                     right_side_cams['right_side_cams{0}Seg'.format(i)] = camera_seg
                     settings.add_sensor(camera_seg)
@@ -167,8 +167,8 @@ def run_carla_client(args):
             # camera_90_p_l_to_car_transform = camera_90_p_l.get_transform()
             # camera_90_p_r_to_car_transform = camera_90_p_r.get_transform()
             # Create a folder for saving episode data
-            if not os.path.isdir("/data/teddy/Datasets/carla_cross_2/Town1/episode_{:0>5d}".format(episode)):
-                os.makedirs("/data/teddy/Datasets/carla_cross_2/Town1/episode_{:0>5d}".format(episode))
+            if not os.path.isdir("/data/teddy/Datasets/carla_left_and_right/Town1/episode_{:0>5d}".format(episode)):
+                os.makedirs("/data/teddy/Datasets/carla_left_and_right/Town1/episode_{:0>5d}".format(episode))
 
             # Iterate every frame in the episode.
             for frame in range(0, frames_per_episode):
