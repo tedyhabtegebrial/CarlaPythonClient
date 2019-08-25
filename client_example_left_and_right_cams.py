@@ -85,60 +85,60 @@ def run_carla_client(args):
                 # y_locs_left = [-1.08, -0.54, 0.0, 0.54, 1.08]
                 y_locs_left = -1.08
                 x_locs_left = [1.84, 2.38, 2.92]
-                left_side_cams = {}
+                LeftSideCameras = {}
                 for i,x_position in enumerate(x_locs_left):
                     # COLOR
-                    camera_rgb = Camera('left_side_cams{0}RGB'.format(i),
+                    camera_rgb = Camera('LeftSideCameras{0}RGB'.format(i),
                                      PostProcessing='SceneFinal')
                     camera_rgb.set_image_size(800, 600)
                     camera_rgb.set_position(x_position, y_locs_left, 1.50)
                     camera_rgb.set_rotation(0, -90.0, 0)
-                    left_side_cams['left_side_cams{0}RGB'.format(i)] = camera_rgb
+                    LeftSideCameras['LeftSideCameras{0}RGB'.format(i)] = camera_rgb
                     settings.add_sensor(camera_rgb)
                     # DEPTH
-                    camera_depth = Camera('left_side_cams{0}Depth'.format(i),
+                    camera_depth = Camera('LeftSideCameras{0}Depth'.format(i),
                                           PostProcessing='Depth')
                     camera_depth.set_image_size(800, 600)
                     camera_depth.set_position(x_position, y_locs_left, 1.50)
                     camera_depth.set_rotation(0, -90.0, 0)
-                    left_side_cams['left_side_cams{0}Depth'.format(i)] = camera_depth
+                    LeftSideCameras['LeftSideCameras{0}Depth'.format(i)] = camera_depth
                     settings.add_sensor(camera_depth)
                     # SEGMENTATION
-                    camera_seg = Camera('left_side_cams{0}Seg'.format(i),
+                    camera_seg = Camera('LeftSideCameras{0}Seg'.format(i),
                                        PostProcessing='SemanticSegmentation')
                     camera_seg.set_image_size(800, 600)
                     camera_seg.set_position(x_position, y_locs_left, 1.50)
                     camera_seg.set_rotation(0, -90.0, 0)
-                    left_side_cams['left_side_cams{0}Seg'.format(i)] = camera_seg
+                    LeftSideCameras['LeftSideCameras{0}Seg'.format(i)] = camera_seg
                     settings.add_sensor(camera_seg)
 
                 y_locs_right = 1.08
                 x_locs_right = [1.84, 2.38, 2.92]
-                right_side_cams = {}
+                RightSideCameras = {}
                 for i,x_position in enumerate(x_locs_right):
                     # COLOR
-                    camera_rgb = Camera('right_side_cams{0}RGB'.format(i),
+                    camera_rgb = Camera('RightSideCameras{0}RGB'.format(i),
                                      PostProcessing='SceneFinal')
                     camera_rgb.set_image_size(800, 600)
                     camera_rgb.set_position(x_position, y_locs_right, 1.50)
                     camera_rgb.set_rotation(0, 90.0, 0)
-                    right_side_cams['right_side_cams{0}RGB'.format(i)] = camera_rgb
+                    RightSideCameras['RightSideCameras{0}RGB'.format(i)] = camera_rgb
                     settings.add_sensor(camera_rgb)
                     # DEPTH
-                    camera_depth = Camera('right_side_cams{0}Depth'.format(i),
+                    camera_depth = Camera('RightSideCameras{0}Depth'.format(i),
                                           PostProcessing='Depth')
                     camera_depth.set_image_size(800, 600)
                     camera_depth.set_position(x_position, y_locs_right, 1.50)
                     camera_depth.set_rotation(0, 90.0, 0)
-                    right_side_cams['right_side_cams{0}Depth'.format(i)] = camera_depth
+                    RightSideCameras['RightSideCameras{0}Depth'.format(i)] = camera_depth
                     settings.add_sensor(camera_depth)
                     # SEGMENTATION
-                    camera_seg = Camera('right_side_cams{0}Seg'.format(i),
+                    camera_seg = Camera('RightSideCameras{0}Seg'.format(i),
                                        PostProcessing='SemanticSegmentation')
                     camera_seg.set_image_size(800, 600)
                     camera_seg.set_position(x_position, y_locs_right, 1.50)
                     camera_seg.set_rotation(0, 90.0, 0)
-                    right_side_cams['right_side_cams{0}Seg'.format(i)] = camera_seg
+                    RightSideCameras['RightSideCameras{0}Seg'.format(i)] = camera_seg
                     settings.add_sensor(camera_seg)
 
             else:
@@ -153,17 +153,12 @@ def run_carla_client(args):
             # to start the episode.
             print('Starting new episode...')
             client.start_episode(player_start)
-            horizontal_cameras_to_car = []
-            for i in range(len(y_locs)):
-                horizontal_cameras_to_car.append(
-                    horizontal_cameras['HorizontalCamera{0}RGB'.format(i)].get_transform())
-            forward_cameras_to_car = []
-            for i in range(len(x_locs)):
-                if i==len(x_locs)//2:
-                    pass
-                else:
-                    forward_cameras_to_car.append(
-                        forward_cameras['ForwardCamera{0}RGB'.format(i)].get_transform())
+            LeftSideCameras_to_car = []
+            for i in range(len(x_locs_right)):
+                LeftSideCameras_to_car.append(LeftSideCameras['LeftSideCameras{0}RGB'.format(i)].get_transform())
+            RightSideCameras_to_car = []
+            for i in range(len(x_locs_right)):
+                RightSideCameras_to_car.append(RightSideCameras['RightSideCameras{0}RGB'.format(i)].get_transform())
             # camera_90_p_l_to_car_transform = camera_90_p_l.get_transform()
             # camera_90_p_r_to_car_transform = camera_90_p_r.get_transform()
             # Create a folder for saving episode data
@@ -177,14 +172,14 @@ def run_carla_client(args):
                 # player_measurements = measurements.player_measurements
                 world_transform = Transform(measurements.player_measurements.transform)
                 # Compute the final transformation matrix.
-                horizontal_cameras_to_world = [world_transform*cam_to_car \
-                                        for cam_to_car in horizontal_cameras_to_car]
-                forward_cameras_to_world = [world_transform*cam_to_car \
-                                        for cam_to_car in forward_cameras_to_car]
+                LeftSideCameras_to_world = [world_transform*cam_to_car \
+                                        for cam_to_car in LeftSideCameras_to_car]
+                RightSideCameras_to_world = [world_transform*cam_to_car \
+                                        for cam_to_car in RightSideCameras_to_car]
 
                 # for i in range(len()):
-                #     horizontal_cameras_to_world.append()
-                #     forward_cameras_to_world.append(world_transform * forward_cameras_to_car[i])
+                #     LeftSideCameras_to_world.append()
+                #     RightSideCameras_to_world.append(world_transform * RightSideCameras_to_car[i])
                 # Save the images to disk if requested.
                 if frame >= 30 and (frame % 2 == 0):
                     if args.save_images_to_disk:
@@ -194,9 +189,9 @@ def run_carla_client(args):
                         # Save Transform matrix of each camera to separated files
                         for cam_num in range(len(y_locs)):
                             line = ""
-                            filename = "{}episode_{:0>5d}/HorizontalCamera{}".format(args.root_path, episode, cam_num) + ".txt"
+                            filename = "{}episode_{:0>5d}/LeftSideCameras{}".format(args.root_path, episode, cam_num) + ".txt"
                             with open(filename, 'a+') as myfile:
-                                for x in np.asarray(horizontal_cameras_to_world[cam_num].matrix[:3, :]).reshape(-1):
+                                for x in np.asarray(LeftSideCameras_to_world[cam_num].matrix[:3, :]).reshape(-1):
                                     line += "{:.8e} ".format(x)
                                 line = line[:-1]
                                 line += "\n"
@@ -210,9 +205,9 @@ def run_carla_client(args):
                             #     pass
                             # else:
                             line = ""
-                            filename = "{}episode_{:0>5d}/ForwardCamera{}".format(args.root_path, episode, cam_num) + ".txt"
+                            filename = "{}episode_{:0>5d}/RightSideCameras{}".format(args.root_path, episode, cam_num) + ".txt"
                             with open(filename, 'a+') as myfile:
-                                for x in np.asarray(forward_cameras_to_world[i].matrix[:3, :]).reshape(-1):
+                                for x in np.asarray(RightSideCameras_to_world[i].matrix[:3, :]).reshape(-1):
                                     line += "{:.8e} ".format(x)
                                 line = line[:-1]
                                 line += "\n"
