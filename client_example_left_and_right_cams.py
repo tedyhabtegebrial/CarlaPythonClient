@@ -198,12 +198,9 @@ def run_carla_client(args):
                                 myfile.write(line)
                                 line = ""
                         # Forward Cameras
-                        forward_cam_ids = list(range(len(x_locs)))
-                        forward_cam_ids.pop(mid_cam)
+                        # forward_cam_ids = list(range(len(x_locs_right)))
+                        # forward_cam_ids.pop(mid_cam)
                         for i, cam_num in enumerate(x_locs_right):
-                            # if cam_num==int(len(x_locs)//2):
-                            #     pass
-                            # else:
                             line = ""
                             filename = "{}episode_{:0>5d}/RightSideCameras{}".format(args.root_path, episode, cam_num) + ".txt"
                             with open(filename, 'a+') as myfile:
