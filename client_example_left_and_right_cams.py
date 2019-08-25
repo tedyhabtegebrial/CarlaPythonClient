@@ -42,11 +42,11 @@ def run_carla_client(args):
     # context manager makes sure the connection is always cleaned up on exit.
     with make_carla_client(args.host, args.port) as client:
         print('CarlaClient connected')
-        # list_of_episodes = [0, 1, 2, 3, 4, 5, 6, 7, 9, 11, 14]
+        list_of_episodes = [0, 1, 2, 3, 4, 5, 6, 7, 9, 11, 14]
         # list_of_episodes = [2, 3, 4, 5, 6, 7, 9, 11, 14]
         # list_of_episodes = [2, 7]
         # list_of_episodes = [5, 6, 7, 11, 14]
-        list_of_episodes = [6, 11]
+        # list_of_episodes = [6, 11]
         # list_of_episodes = [7]
         #list(range(0, number_of_episodes))
         #list_of_episodes.pop(13)
@@ -311,8 +311,8 @@ def main():
 
     logging.info('listening to server %s:%s', args.host, args.port)
 
-    args.out_filename_format = '/data/teddy/Datasets/carla_cross_2/Town1/episode_{:0>5d}/{:s}/{:0>6d}'
-    args.root_path = '/data/teddy/Datasets/carla_cross_2/Town1/'
+    args.out_filename_format = '/data/teddy/Datasets/carla_left_and_right/Town1/episode_{:0>5d}/{:s}/{:0>6d}'
+    args.root_path = '/data/teddy/Datasets/carla_left_and_right/Town1/'
 
     while True:
         try:
