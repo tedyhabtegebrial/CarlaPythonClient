@@ -9,11 +9,10 @@ This leads to a wrong rotation matrix with -1 determinant.
 # Command to run Carla Engine on Server
 ```
 ./CarlaUE4.sh /Game/Maps/Town01 -carla-server -world-port=2000  -benchmark -fps=4
+
 ```
 
 # Command to run Carla dataset recording script
 ```
-python client_example.py -a -i
+python client_example_left_and_right_cams.py -a -i -p 4000
 ```
-
-
