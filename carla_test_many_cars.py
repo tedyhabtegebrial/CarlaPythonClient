@@ -17,13 +17,13 @@ import time
 import os
 import numpy as np
 
-from .carla.client import make_carla_client
-from .carla.sensor import Camera, Lidar
-from .carla.settings import CarlaSettings
-from .carla.tcp import TCPConnectionError
-from .carla.util import print_over_same_line
-from .carla.transform import Transform #, Translation, Rotation, Scale
-from .carla import image_converter
+from carla.client import make_carla_client
+from carla.sensor import Camera, Lidar
+from carla.settings import CarlaSettings
+from carla.tcp import TCPConnectionError
+from carla.util import print_over_same_line
+from carla.transform import Transform #, Translation, Rotation, Scale
+from carla import image_converter
 # import cv
 
 
