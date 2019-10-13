@@ -131,7 +131,7 @@ def run_carla_client(args):
                 if frame >= 30 and (frame % 4 == 0):
                     if args.save_images_to_disk:
                         for name, measurement in sensor_data.items():
-                            filename = args.out_filename_format.format(episode, name, (frame-30)/2)
+                            filename = args.out_filename_format.format(episode, name, int((frame-30)/2))
                             measurement.save_to_disk(filename)
                         # Save Transform matrix of each camera to separated files
                         for cam_num in range(len(y_locs)):
