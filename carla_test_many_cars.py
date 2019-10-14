@@ -115,8 +115,8 @@ def run_carla_client(args):
             for i in range(len(y_locs)):
                 horizontal_cameras_to_car.append(
                     horizontal_cameras['HorizontalCamera{0}RGB'.format(i)].get_transform())
-            if not os.path.isdir("/data/teddy/Datasets/carla_more_cars/Town1/episode_{:0>5d}".format(episode)):
-                os.makedirs("/data/teddy/Datasets/carla_more_cars/Town1/episode_{:0>5d}".format(episode))
+            if not os.path.isdir("/data/teddy/Datasets/carla_more_cars/Town2/episode_{:0>5d}".format(episode)):
+                os.makedirs("/data/teddy/Datasets/carla_more_cars/Town2/episode_{:0>5d}".format(episode))
 
             # Iterate every frame in the episode.
             for frame in range(0, frames_per_episode):
@@ -237,8 +237,8 @@ def main():
 
     logging.info('listening to server %s:%s', args.host, args.port)
 
-    args.out_filename_format = '/data/teddy/Datasets/carla_more_cars/Town1/episode_{:0>5d}/{:s}/{:0>6d}'
-    args.root_path = '/data/teddy/Datasets/carla_more_cars/Town1/'
+    args.out_filename_format = '/data/teddy/Datasets/carla_more_cars/Town2/episode_{:0>5d}/{:s}/{:0>6d}'
+    args.root_path = '/data/teddy/Datasets/carla_more_cars/Town2/'
 
     while True:
         try:
