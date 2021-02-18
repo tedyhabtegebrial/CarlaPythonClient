@@ -14,5 +14,19 @@ This leads to a wrong rotation matrix with -1 determinant.
 
 # Command to run Carla dataset recording script
 ```
-python client_example_left_and_right_cams.py -a -i -p 4000
+python client_example_left_and_right_cams.py -a -i -p 2000 -t 1
+
+
+```
+
+
+# Light Field
+
+```
+
+# Run carla simulator server
+DISPLAY= ./CarlaUE4.sh /Game/Maps/Town01 -carla-server -world-port=2000  -benchmark -fps=4
+# Run the client
+
+python2.7 main_carla_lf.py -a -i -p 2000 --town_id=1 --data-path /data/teddy/Datasets/carla_temp
 ```

@@ -30,7 +30,7 @@ from carla import image_converter
 def run_carla_client(args):
     # Here we will run 3 episodes with 300 frames each.
     number_of_episodes = 15
-    frames_per_episode = 10030
+    frames_per_episode = 10050
     #              [0  , 1  , 2  , 3  , 4  , 5  , 6 , 7, 8  , 9  , 10, 11, 12, 13, 14]
     # vehicles_num = [60, 60, 70, 50, 60, 60, 80, 60, 60, 60, 50, 70, 60, 50, 50]
     vehicles_num = [35, 35, 30, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35]
@@ -43,8 +43,8 @@ def run_carla_client(args):
     with make_carla_client(args.host, args.port) as client:
         print('CarlaClient connected')
         # list_of_episodes = [11]
-        list_of_episodes = [9, 11, 14]
-        # list_of_episodes = [0, 1, 2, 3, 4, 5, 6, 7, 9, 11, 14]
+        # list_of_episodes = [9, 11, 14]
+        list_of_episodes = [0, 1, 2, 3, 4, 5, 6, 7, 9, 11, 14]
         # list_of_episodes = [6, 7, 9, 11, 14]
         # list_of_episodes = [2, 3, 4, 5, 6, 7, 9, 11, 14]
         # list_of_episodes = [2, 7]
@@ -70,7 +70,7 @@ def run_carla_client(args):
                     SynchronousMode=True,
                     SendNonPlayerAgentsInfo=False,
                     NumberOfVehicles= vehicles_num[episode],#random.choice([0, 20, 15, 20, 25, 21, 24, 18, 40, 35, 25, 30]), #25,
-                    NumberOfPedestrians=25,
+                    NumberOfPedestrians=4,
                     DisableTwoWheeledVehicles=False,
                     WeatherId= episode, #1, #random.choice([1, 3, 7, 8, 14]),
                     QualityLevel=args.quality_level)
@@ -84,35 +84,37 @@ def run_carla_client(args):
                 # [-1.62, -1.08, -0.54, 0.0, 0.54, 1.08, 1.62]
                 # LEFT RGB CAMERA
                 # y_locs = [-1.62, -1.08, -0.54, 0.0, 0.54, 1.08, 1.62]
-                # x_locs = [1.3, 1.84, 2.38, 2.92, 3.46, 4.0, 4.54]
+                # z_locs = [1.3, 1.84, 2.38, 2.92, 3.46, 4.0, 4.54]
                 # y_locs_left = [-1.08, -0.54, 0.0, 0.54, 1.08]
-                x_locs = [i.item() for f in np.linspace(0, 14*0.5, 15)]
-                y_locs = [i.item() for f in np.linspace(0, 14*0.5, 15)]
+                z_locs = [i.item()-7*0.5 for i in np.linspace(0, 14*0.5, 15)] # Up
+                y_locs = [i.item()-7*0.5 for i in np.linspace(0, 14*0.5, 15)] # Right
                 rotation_y = 0
                 CameraArray = {}
                 for j,y_position in enumerate(y_locs):
-                    for i,x_position in enumerate(x_locs):
+                    for i,z_position in enumerate(z_locs):
                         # COLOR
-                        camera_rgb = Camera('RGB_{:0>2d}_{:0>2d}'.format(j, i)',
+                        camera_rgb = Camera('RGB_{:0>2d}_{:0>2d}'.format(j, i),
                                         PostProcessing='SceneFinal')
                         camera_rgb.set_image_size(800, 600)
-                        camera_rgb.set_position(x_position, y_locs_left, 1.50)
+                        camera_rgb.set_position(2.0, y_position, 2.00-z_position)
                         camera_rgb.set_rotation(0, rotation_y, 0)
-                        CameraArray['RGB_{:0>2d}_{:0>2d}'.format(j, i)'] = camera_rgb
+                        CameraArray['RGB_{:0>2d}_{:0>2d}'.format(j, i)] = camera_rgb
                         settings.add_sensor(camera_rgb)
                         # DEPTH
-                        camera_depth = Camera('Depth_{:0>2d}_{:0>2d}'.format(j, i)',
+                        camera_depth = Camera('Depth_{:0>2d}_{:0>2d}'.format(j, i),
                                             PostProcessing='Depth')
                         camera_depth.set_image_size(800, 600)
-                        camera_depth.set_position(x_position, y_locs_left, 1.50)
+                        camera_depth.set_position(
+                            2.0, y_position, 2.0-z_position)
                         camera_depth.set_rotation(0, rotation_y, 0)
-                        CameraArray['Depth_{:0>2d}_{:0>2d}'.format(j, i)'] = camera_depth
+                        CameraArray['Depth_{:0>2d}_{:0>2d}'.format(j, i)] = camera_depth
                         settings.add_sensor(camera_depth)
                         # SEGMENTATION
-                        camera_seg = Camera('SEM_{:0>2d}_{:0>2d}'.format(j, i)',
+                        camera_seg = Camera('SEM_{:0>2d}_{:0>2d}'.format(j, i),
                                         PostProcessing='SemanticSegmentation')
                         camera_seg.set_image_size(800, 600)
-                        camera_seg.set_position(x_position, y_locs_left, 1.50)
+                        camera_seg.set_position(
+                            2.0, y_position, 2.0-z_position)
                         camera_seg.set_rotation(0, rotation_y, 0)
                         CameraArray['SEM_{:0>2d}_{:0>2d}'.format(j, i)] = camera_seg
                         settings.add_sensor(camera_seg)
@@ -128,25 +130,32 @@ def run_carla_client(args):
             # to start the episode.
             print('Starting new episode...')
             client.start_episode(player_start)
+            print('Created a new episode...')
             Cameras_to_car = []
             for j in range(len(y_locs)):
-                for i in range(len(x_locs)):            
+                for i in range(len(z_locs)):            
                     Cameras_to_car.append(CameraArray['RGB_{:0>2d}_{:0>2d}'.format(j, i)].get_transform())
+            print('created a camera array')
             # Create a folder for saving episode data
-            episode_dir = "{}/Town0{}/episode_{:0>5d}".format(args.data_path, args.town_id, episode)
+            episode_dir = "{}/Town{:0>2d}/episode_{:0>5d}".format(
+                args.data_path, args.town_id, episode)
             if not os.path.isdir(episode_dir):
                 os.makedirs(episode_dir)
-
+            print('created destination folder')
             # Iterate every frame in the episode.
             for frame in range(0, frames_per_episode):
                 # Read the data produced by the server this frame.
+                time.sleep(1)
                 measurements, sensor_data = client.read_data()
+                print('got measurements')
                 # player_measurements = measurements.player_measurements
                 world_transform = Transform(measurements.player_measurements.transform)
                 # Compute the final transformation matrix.
+                print('debug point 1')
                 Cameras_to_world = [world_transform*cam_to_car \
                                         for cam_to_car in Cameras_to_car]
                 if frame >= 50 and (frame % 100 == 0):
+                    print('debug point 2')
                     if args.save_images_to_disk:
                         output_dir = os.path.join(episode_dir, "{:0>6d}".format((frame-50)/100))
                         if not os.path.isdir(output_dir):
@@ -154,16 +163,17 @@ def run_carla_client(args):
                         for name, measurement in sensor_data.items():
                             # filename = args.out_filename_format.format(episode, name, (frame-50)/100)
                             filename = os.path.join(output_dir, name)
+                            print('writing:', filename)
                             measurement.save_to_disk(filename)
                         cam_2_world_file = os.path.join(output_dir, 'cam_2_world.txt')
                         with open(cam_2_world_file, 'w') as myfile:                            
                             for cam_num in range(len(Cameras_to_world)):
                                 line = ""
                                 for x in np.asarray(Cameras_to_world[cam_num].matrix[:3, :]).reshape(-1):
-                                        line += "{:.8e} ".format(x)
-                                    line = line[:-1]
-                                    line += "\n"
-                                    myfile.write(line)
+                                    line += "{:.8e} ".format(x)
+                                line = line[:-1]
+                                line += "\n"
+                                myfile.write(line)
                 if not args.autopilot:
                     client.send_control(
                         steer=random.uniform(-1.0, 1.0),
@@ -249,7 +259,16 @@ def main():
         dest='settings_filepath',
         default=None,
         help='Path to a "CarlaSettings.ini" file')
-
+    argparser.add_argument(
+        '-d', '--data-path',
+        dest='data_path',
+        default=None,
+        help='Output directory')
+    argparser.add_argument(
+        '--town_id',
+        type=int,
+        default=None,
+        help='Town number')
     args = argparser.parse_args()
 
     log_level = logging.DEBUG if args.debug else logging.INFO
@@ -257,8 +276,8 @@ def main():
 
     logging.info('listening to server %s:%s', args.host, args.port)
 
-    args.out_filename_format = '/data/teddy/Datasets/carla_left_and_right/Town2/episode_{:0>5d}/{:s}/{:0>6d}'
-    args.root_path = '/data/teddy/Datasets/carla_left_and_right/Town2/'
+    # args.out_filename_format = '/data/teddy/Datasets/carla_left_and_right/Town2/episode_{:0>5d}/{:s}/{:0>6d}'
+    # args.root_path = '/data/teddy/Datasets/carla_left_and_right/Town2/'
 
     while True:
         try:
